@@ -1,0 +1,75 @@
+version: '3.4'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+    volumes:
+      - ./server:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - travel_planner
+  
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: unless-stopped
+    tty: "true"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: travel_planner
+      MYSQL_USER: travel_planner
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    networks:
+      - travel_planner
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  server:
+    build:
+      args:
+        user: travel_planner
+        uid: 1000
+      context: .
+      dockerfile: Dockerfile
+    container_name: server
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./server:/var/www
+    ports:
+      - "9000:9000"
+    networks:
+      - travel_planner
+    user: travel_planner
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    depends_on: 
+      - mysql
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+    ports:
+      - 8081:80
+    volumes:
+      - /sessions
+    networks:
+      - travel_planner
+
+networks:
+  travel_planner:
+    driver: bridge
+
+volumes:
+  mysql-data:
