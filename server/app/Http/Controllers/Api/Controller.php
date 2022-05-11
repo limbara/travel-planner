@@ -15,7 +15,7 @@ class Controller extends BaseController
     {
         return response()->json([
             'message' => $message,
-            'data' => $data
+            'data' => count($data) ? $data : null
         ]);
     }
 }
