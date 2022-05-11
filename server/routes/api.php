@@ -28,4 +28,5 @@ Route::prefix('/auth')->group(function () {
 Route::middleware('auth:sanctum')->prefix('/trips')->group(function () {
 
     Route::get('/', [TripController::class, 'index']);
+    Route::post('/', [TripController::class, 'store']);
 });
