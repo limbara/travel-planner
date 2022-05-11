@@ -103,4 +103,19 @@ class TripController extends Controller
             'trip' => $savedTrip
         ]);
     }
+
+    public function delete(string $id)
+    {
+        $savedTrip = Trip::where('id', $id)->first();
+
+        if (!$savedTrip) {
+            throw new NotFoundException("Trip Not Found");
+        }
+
+        $savedTrip->delete();
+
+        return $this->responseSuccess('Success', [
+            'trip' => $savedTrip
+        ]);
+    }
 }
