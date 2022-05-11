@@ -136,6 +136,10 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+
+    // custom from Validator Extends
+    'alpha_num_space' => ':attribute may only contain letters, numeric and space.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

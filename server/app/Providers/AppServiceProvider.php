@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Utils\ValidationUtils;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extend('alpha_num_space', function ($attribute, $value) {
+            return ValidationUtils::isAlphaNumericSpaceOnly($value);
+        });
     }
 }
