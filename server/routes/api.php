@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\TripController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +21,11 @@ Route::prefix('/auth')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user', [AuthController::class, 'user']);
-
         Route::post('/logout', [AuthController::class, 'logout']);
     });
+});
+
+Route::middleware('auth:sanctum')->prefix('/trips')->group(function () {
+
+    Route::get('/', [TripController::class, 'index']);
 });
