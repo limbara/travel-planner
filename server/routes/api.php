@@ -29,4 +29,5 @@ Route::middleware('auth:sanctum')->prefix('/trips')->group(function () {
 
     Route::get('/', [TripController::class, 'index']);
     Route::post('/', [TripController::class, 'store']);
+    Route::post('/{id}', [TripController::class, 'update'])->whereUuid('id');
 });

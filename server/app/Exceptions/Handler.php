@@ -9,6 +9,7 @@ use App\Exceptions\Api\InternalErrorException as ApiInternalErrorException;
 use App\Exceptions\Api\NotFoundException as ApiNotFoundException;
 use App\Exceptions\Api\UnauthorizedException as ApiUnauthorizedException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\App;
 use Illuminate\Validation\ValidationException;
@@ -68,6 +69,7 @@ class Handler extends ExceptionHandler
                 $e instanceof ApiCustomException => $e,
                 $e instanceof BadRequestHttpException => new ApiBadRequestException($e->getMessage()),
                 $e instanceof NotFoundHttpException => new ApiNotFoundException($e->getMessage()),
+                $e instanceof ModelNotFoundException => new ApiNotFoundException($e->getMessage()),
                 $e instanceof ValidationException => (new ApiBadRequestException($e->getMessage()))->setErrors($e->errors()),
                 $e instanceof AuthenticationException => new ApiUnauthorizedException($e->getMessage()),
                 $e instanceof UnauthorizedHttpException => new ApiUnauthorizedException($e->getMessage()),
