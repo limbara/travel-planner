@@ -55,6 +55,7 @@ class Handler extends ExceptionHandler
         if ($this->shouldReturnJson($request, $e)) {
             $e = match (true) {
                 $e instanceof AuthenticationException => new UnauthorizedException($e->getMessage()),
+                default => $e
             };
         }
 
