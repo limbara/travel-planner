@@ -2,9 +2,19 @@
 
 namespace App\Exceptions;
 
-use App\Exceptions\Api\UnauthorizedException;
+use App\Exceptions\Api\BadRequestException as ApiBadRequestException;
+use App\Exceptions\Api\CustomException as ApiCustomException;
+use App\Exceptions\Api\ErrorException as ApiErrorException;
+use App\Exceptions\Api\InternalErrorException as ApiInternalErrorException;
+use App\Exceptions\Api\NotFoundException as ApiNotFoundException;
+use App\Exceptions\Api\UnauthorizedException as ApiUnauthorizedException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -53,12 +63,18 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         if ($this->shouldReturnJson($request, $e)) {
-            $e = match (true) {
-                $e instanceof AuthenticationException => new UnauthorizedException($e->getMessage()),
-                default => $e
+            $err = match (true) {
+                $e instanceof ApiCustomException => $e,
+                $e instanceof BadRequestHttpException => new ApiBadRequestException($e->getMessage()),
+                $e instanceof NotFoundHttpException => new ApiNotFoundException($e->getMessage()),
+                $e instanceof ValidationException => (new ApiBadRequestException($e->getMessage()))->setErrors($e->errors()),
+                $e instanceof AuthenticationException => new ApiUnauthorizedException($e->getMessage()),
+                $e instanceof UnauthorizedHttpException => new ApiUnauthorizedException($e->getMessage()),
+                $e instanceof HttpException => new ApiErrorException($e->getMessage(), $e->getStatusCode()),
+                default => new ApiInternalErrorException($e->getMessage())
             };
         }
 
-        return parent::render($request, $e);
+        return parent::render($request, $err);
     }
 }

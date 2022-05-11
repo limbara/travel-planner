@@ -2,9 +2,7 @@
 
 namespace App\Exceptions\Api;
 
-use Exception;
-
-class UnauthorizedException extends Exception
+class UnauthorizedException extends CustomException
 {
     public function render()
     {

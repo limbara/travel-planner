@@ -2,9 +2,7 @@
 
 namespace App\Exceptions\Api;
 
-use Exception;
-
-class NotFoundException extends Exception
+class InternalErrorException extends CustomException
 {
     public function render()
     {
