@@ -10,6 +10,7 @@ use App\Exceptions\Api\NotFoundException as ApiNotFoundException;
 use App\Exceptions\Api\UnauthorizedException as ApiUnauthorizedException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\App;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -71,7 +72,7 @@ class Handler extends ExceptionHandler
                 $e instanceof AuthenticationException => new ApiUnauthorizedException($e->getMessage()),
                 $e instanceof UnauthorizedHttpException => new ApiUnauthorizedException($e->getMessage()),
                 $e instanceof HttpException => new ApiErrorException($e->getMessage(), $e->getStatusCode()),
-                default => new ApiInternalErrorException($e->getMessage())
+                default => App::environment('production') ? new ApiInternalErrorException($e->getMessage()) : $e,
             };
         }
 
