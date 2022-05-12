@@ -22,7 +22,7 @@ class Plan extends Model
         'id',
         'title',
         'description',
-        'plannable_types',
+        'plannable_type',
         'plannable_id',
         'start_date',
         'end_date',
