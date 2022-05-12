@@ -28,5 +28,9 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('alpha_num_space', function ($attribute, $value) {
             return ValidationUtils::isAlphaNumericSpaceOnly($value);
         });
+
+        Validator::extend('plan_enum', function ($attribute, $value) {
+            return ValidationUtils::isPlanEnum($value);
+        });
     }
 }

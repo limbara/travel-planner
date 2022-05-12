@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\PlanEnum;
+
 return [
 
     /*
@@ -139,7 +141,7 @@ return [
 
     // custom from Validator Extends
     'alpha_num_space' => ':attribute may only contain letters, numeric and space.',
-
+    'plan_enum' => sprintf("The valid :attribute value are %s", implode(',', PlanEnum::values())),
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
