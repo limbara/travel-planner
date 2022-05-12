@@ -1,0 +1,81 @@
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class LoginTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function testLoginRequiresEmailAndPassword()
+    {
+        $this->json('POST', 'api/auth/login', [], ['Accept' => 'application/json'])
+            ->assertStatus(400)
+            ->assertJson([
+                'errors' => [
+                    'email' => ['The email field is required.'],
+                    'password' => ['The password field is required.']
+                ]
+            ])
+            ->assertJsonStructure([
+                'error_code',
+                'error_message',
+                'errors'
+            ]);
+    }
+
+    public function testLoginInvalidEmail()
+    {
+        $this->seed();
+
+        $loginData = [
+            'email' => 'Nico@example.net',
+            'password' => 'password'
+        ];
+
+        $this->json('POST', 'api/auth/login', $loginData, ['Accept' => 'application/json'])
+            ->assertStatus(401)
+            ->assertJson([
+                'error_code' => 401,
+                'error_message' => 'invalid email or password'
+            ]);
+    }
+
+    public function testLoginInvalidPassword()
+    {
+        $this->seed();
+
+        $loginData = [
+            'email' => 'Nico@example.com',
+            'password' => 'wrong password'
+        ];
+
+        $this->json('POST', 'api/auth/login', $loginData, ['Accept' => 'application/json'])
+            ->assertStatus(401)
+            ->assertJson([
+                'error_code' => 401,
+                'error_message' => 'invalid email or password'
+            ]);
+    }
+
+    public function testLoginSuccess()
+    {
+        $this->seed();
+
+        $loginData = [
+            'email' => 'Nico@example.com',
+            'password' => 'password'
+        ];
+
+        $this->json('POST', 'api/auth/login', $loginData, ['Accept' => 'application/json'])
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'token'
+                ]
+            ]);
+    }
+}
