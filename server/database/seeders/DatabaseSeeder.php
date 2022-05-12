@@ -36,7 +36,9 @@ class DatabaseSeeder extends Seeder
             $savedUser = User::factory()->state($user)->create();
 
             $savedTrip = Trip::factory()->state([
-                'user_id' => $savedUser->id
+                'user_id' => $savedUser->id,
+                'date_from' => Carbon::createFromFormat('Y-m-d H:i:s', '2022-05-14 00:32:12'),
+                'date_to' => Carbon::createFromFormat('Y-m-d H:i:s', '2022-05-22 04:51:26'),
             ])->create();
 
             $tripDateFrom = Carbon::createFromDate($savedTrip->date_from);
@@ -85,11 +87,13 @@ class DatabaseSeeder extends Seeder
 
             // Lodging Plan check in
             $checkInDate = $transportArrivalDate->clone();
-            $checkOutDate = $tripDateTo->clone()->startOfDay()->addHours(12);
+            $checkOutDate = $tripDateTo->clone()->startOfDay()->subHours(6);
 
             Plan::factory()->setSchedule(
                 $checkInDate,
-                $checkInDate
+                $checkInDate,
+                $checkInDate,
+                $checkInDate,
             )->state([
                 'title' => "Check in to ${lodgingName}",
                 'trip_id' => $savedTrip->id
@@ -147,6 +151,8 @@ class DatabaseSeeder extends Seeder
 
             // Lodging Plan Check out
             Plan::factory()->setSchedule(
+                $checkOutDate,
+                $checkOutDate,
                 $checkOutDate,
                 $checkOutDate
             )->state([
