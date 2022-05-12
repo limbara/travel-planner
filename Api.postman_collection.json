@@ -1,0 +1,522 @@
+{
+	"info": {
+		"_postman_id": "b858c75f-4589-4416-ad7c-0343c7cc511e",
+		"name": "Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"Nico@example.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/auth/login",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/auth/user",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"auth",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/auth/logout",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trips",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/trips",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Trip",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\" : \"Trip To Singapore\",\n    \"description\": \"Trip To Singapore\",\n    \"origin\": \"Indonesia\",\n    \"destination\": \"Singapore\",\n    \"date_from\": \"2022-06-01 00:00:00\",\n    \"date_to\": \"2022-06-07 23:59:59\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/trips",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Trip",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\" : \"Trip To Singapore\",\n    \"description\": \"Trip To Singapore updated description\",\n    \"origin\": \"Indonesia\",\n    \"destination\": \"Singapore\",\n    \"date_from\": \"2022-06-01 00:00:00\",\n    \"date_to\": \"2022-06-07 23:59:59\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/trips/{{fresh_created_trip_id}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips",
+								"{{fresh_created_trip_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Trip",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/trips/{{fresh_created_trip_id}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips",
+								"{{fresh_created_trip_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Trip",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/trips/{{trip_id_index_0}}",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips",
+								"{{trip_id_index_0}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Transport Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\" : \"Transport to Changi Airport\",\n    \"description\": \"Transport to Changi Airport\",\n    \"plan_type\": \"TRANSPORT_PLAN\",\n    \"lat_from\": 1.4315594978779551,\n    \"lng_from\": 103.83497099171741,\n    \"lat_to\": 1.3491750070012891,\n    \"lng_to\": 103.98554118791908,\n    \"address_from\": \"Yishun Singapore\",\n    \"address_to\": \"Airport Blvd., Singapore\",\n    \"transportation\" : \"car\",\n    \"transport_date\" : \"2022-05-17 11:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/trips/{{trip_id_index_0}}/plans",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips",
+								"{{trip_id_index_0}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Flight Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\" : \"Flight to Malaysia\",\n    \"description\": \"Flight to Malaysia\",\n    \"plan_type\": \"FLIGHT_PLAN\",\n    \"departure_airport\": \"Changi Airport\",\n    \"arrival_airport\": \"Kuala Lumpur International Airport\",\n    \"departure_date\": \"2022-05-17 13:00:00\",\n    \"arrival_date\": \"2022-05-17 14:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/trips/{{trip_id_index_0}}/plans",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips",
+								"{{trip_id_index_0}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Lodging Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\" : \"Gambling at Casino De Genting\",\n    \"description\": \"Gambling at Casino De Genting\",\n    \"plan_type\": \"ACTIVITY_PLAN\",\n    \"location_lat\": 3.4198142610865734,\n    \"location_lng\": 101.79890815066175,\n    \"location_name\": \"Casino De Genting\",\n    \"location_address\": \"Casino De Genting, Genting Grand Genting Highlands Resort, 69000 Genting Highlands, Pahang, Malaysia\",\n    \"activity_date_from\": \"2022-05-17 18:00:00\",\n    \"activity_date_to\": \"2022-05-17 21:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/trips/{{trip_id_index_0}}/plans",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips",
+								"{{trip_id_index_0}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activity Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\" : \"Stay in Grand Ion Delemen Hotel\",\n    \"description\": \"Stay in Grand Ion Delemen Hotel\",\n    \"plan_type\": \"LODGING_PLAN\",\n    \"location_lat\": 3.4330317988229626,\n    \"location_lng\": 101.7898954341072,\n    \"location_name\": \"Grand Ion Delemen Hotel\",\n    \"location_address\": \"Grand Ion Delemen Hotel, Jalan Ion Delemen, 6900 Genting Highlands, Pahang, Malaysia\",\n    \"check_in_date\": \"2022-05-17 16:00:00\",\n    \"check_out_date\": \"2022-05-18 12:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/trips/{{trip_id_index_0}}/plans",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips",
+								"{{trip_id_index_0}}",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
