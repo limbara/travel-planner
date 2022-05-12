@@ -2,13 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-class LoginTest extends TestCase
+class LoginTest extends BaseTest
 {
-    use RefreshDatabase;
-
     public function testLoginRequiresEmailAndPassword()
     {
         $this->json('POST', 'api/auth/login', [], ['Accept' => 'application/json'])

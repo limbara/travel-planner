@@ -2,13 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-class AuthUserTest extends TestCase
+class AuthUserTest extends BaseTest
 {
-    use RefreshDatabase;
-
     public function testAuthUserWithoutToken()
     {
         $this->json('GET', 'api/auth/user', [], ['Accept' => 'application/json'])
@@ -23,13 +18,7 @@ class AuthUserTest extends TestCase
     {
         $this->seed();
 
-        $loginData = [
-            'email' => 'Nico@example.com',
-            'password' => 'password'
-        ];
-
-        $loginResponse = $this->json('POST', 'api/auth/login', $loginData, ['Accept' => 'application/json'])->decodeResponseJson();
-        $token = $loginResponse['data']['token'];
+        $token = $this->getLoginToken();
 
         $this->json('GET', 'api/auth/user', [], ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
             ->assertStatus(200)
