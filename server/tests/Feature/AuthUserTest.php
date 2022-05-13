@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+
 class AuthUserTest extends BaseTest
 {
     public function testAuthUserWithoutToken()
@@ -18,9 +20,10 @@ class AuthUserTest extends BaseTest
     {
         $this->seed();
 
-        $token = $this->getLoginToken();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $this->json('GET', 'api/auth/user', [], ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('GET', 'api/auth/user', [], ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->assertJsonStructure([
                 'message',

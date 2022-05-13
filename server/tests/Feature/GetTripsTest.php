@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Trip;
+use App\Models\User;
+
 class GetTripsTest extends BaseTest
 {
     public function testGetTripsWithoutToken()
@@ -16,11 +19,14 @@ class GetTripsTest extends BaseTest
 
     public function testGetTrips()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
+        $trip = Trip::factory()->state([
+            'user_id' => $user->id
+        ])->create();
 
-        $jsonResponse = $this->json('GET', 'api/trips', [], ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])->assertStatus(200)->decodeResponseJson();
+        $jsonResponse = $this->json('GET', 'api/trips', [], ['Accept' => 'application/json'])->assertStatus(200)->decodeResponseJson();
 
         $jsonResponse->assertStructure([
             'message',

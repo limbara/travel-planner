@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\Api\UnauthorizedException;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -17,11 +15,14 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
-        
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!Auth::attempt([
+            'email' => $request->post('email'),
+            'password' => $request->post('password')
+        ])) {
             throw new UnauthorizedException("invalid email or password");
         }
+
+        $user = Auth::user();
 
         return $this->responseSuccess('Success', [
             'token' => $user->createToken("web")->plainTextToken
@@ -42,6 +43,8 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $user->tokens()->where('name', 'web')->delete();
+
+        Auth::guard('web')->logout();
 
         return $this->responseSuccess('Success');
     }

@@ -9,7 +9,7 @@ abstract class BaseTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function getLoginToken(string $email = 'Nico@example.com', string $password = 'password')
+    protected function getLoginToken(string $email = 'nico@example.com', string $password = 'password')
     {
         $loginData = [
             'email' => $email,

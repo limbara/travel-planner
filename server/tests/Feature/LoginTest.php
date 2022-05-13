@@ -43,7 +43,7 @@ class LoginTest extends BaseTest
         $this->seed();
 
         $loginData = [
-            'email' => 'Nico@example.com',
+            'email' => 'nico@example.com',
             'password' => 'wrong password'
         ];
 
@@ -60,7 +60,7 @@ class LoginTest extends BaseTest
         $this->seed();
 
         $loginData = [
-            'email' => 'Nico@example.com',
+            'email' => 'nico@example.com',
             'password' => 'password'
         ];
 

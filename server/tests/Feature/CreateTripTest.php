@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+
 class CreateTripTest extends BaseTest
 {
     public function testCreateTripWithOutToken()
@@ -16,9 +18,8 @@ class CreateTripTest extends BaseTest
 
     public function testCreateTripNonAlphaNumSpaceTitle()
     {
-        $this->seed();
-
-        $token = $this->getLoginToken();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
         $tripData = [
             'title' => 'Trip To Singapore #2',
@@ -29,7 +30,7 @@ class CreateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -46,9 +47,8 @@ class CreateTripTest extends BaseTest
 
     public function testCreateTripNonAlphaNumSpaceOrigin()
     {
-        $this->seed();
-
-        $token = $this->getLoginToken();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -59,7 +59,7 @@ class CreateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -76,9 +76,8 @@ class CreateTripTest extends BaseTest
 
     public function testCreateTripNonAlphaNumSpaceDestination()
     {
-        $this->seed();
-
-        $token = $this->getLoginToken();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -89,7 +88,7 @@ class CreateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -106,9 +105,8 @@ class CreateTripTest extends BaseTest
 
     public function testCreateTripDateFromInThePast()
     {
-        $this->seed();
-
-        $token = $this->getLoginToken();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -119,7 +117,7 @@ class CreateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -136,9 +134,8 @@ class CreateTripTest extends BaseTest
 
     public function testCreateTripDateToBeforeDateFrom()
     {
-        $this->seed();
-
-        $token = $this->getLoginToken();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -149,7 +146,7 @@ class CreateTripTest extends BaseTest
             'date_to' => '2022-05-07 23:59:59'
         ];
 
-        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -166,9 +163,8 @@ class CreateTripTest extends BaseTest
 
     public function testCreateTripSuccess()
     {
-        $this->seed();
-
-        $token = $this->getLoginToken();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -179,7 +175,7 @@ class CreateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $createTripResponse = $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $createTripResponse = $this->json('POST', 'api/trips', $tripData, ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->decodeResponseJson();
 
@@ -203,7 +199,7 @@ class CreateTripTest extends BaseTest
 
         $trip = $createTripResponse['data']['trip'];
 
-        $this->json('GET', 'api/trips', [], ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('GET', 'api/trips', [], ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->assertJsonFragment([
                 'id' => $trip['id']

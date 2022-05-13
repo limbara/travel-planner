@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Support\Str;
 
@@ -21,12 +22,12 @@ class DeleteTripTest extends BaseTest
 
     public function testDeleteNotFoundTrip()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
         $uuid = Str::uuid();
 
-        $this->json('DELETE', "api/trips/{$uuid}", [], ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('DELETE', "api/trips/{$uuid}", [], ['Accept' => 'application/json'])
             ->assertStatus(404)
             ->assertJson([
                 'error_code' => 404,
@@ -36,14 +37,14 @@ class DeleteTripTest extends BaseTest
 
     public function testDeleteTripSuccess()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
+        $trip = Trip::factory()->state([
+            'user_id' => $user->id
+        ])->create();
 
-        $user  = User::where('email', 'Nico@example.com')->first();
-        $trip = $user->trips()->first();
-
-        $deleteTripResponse = $this->json('DELETE', "api/trips/{$trip->id}", [], ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $deleteTripResponse = $this->json('DELETE', "api/trips/{$trip->id}", [], ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->decodeResponseJson();
 
@@ -67,7 +68,7 @@ class DeleteTripTest extends BaseTest
 
         $trip = $deleteTripResponse['data']['trip'];
 
-        $this->json('GET', 'api/trips', [], ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('GET', 'api/trips', [], ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->assertJsonMissing([
                 'id' => $trip['id']

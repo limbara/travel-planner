@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Support\Str;
 
@@ -23,7 +24,9 @@ class UpdateTripTest extends BaseTest
     {
         $this->seed();
 
-        $token = $this->getLoginToken();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
+
         $uuid = Str::uuid();
 
         $tripData = [
@@ -35,7 +38,7 @@ class UpdateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', "api/trips/{$uuid}", $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', "api/trips/{$uuid}", $tripData, ['Accept' => 'application/json'])
             ->assertStatus(404)
             ->assertJson([
                 'error_code' => 404,
@@ -45,12 +48,12 @@ class UpdateTripTest extends BaseTest
 
     public function testUpdateTripNonAlphaNumSpaceTitle()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
-
-        $user  = User::where('email', 'Nico@example.com')->first();
-        $trip = $user->trips()->first();
+        $trip = Trip::factory()->state([
+            'user_id' => $user->id
+        ])->create();
 
         $tripData = [
             'title' => 'Trip To Singapore #2',
@@ -61,7 +64,7 @@ class UpdateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -78,12 +81,12 @@ class UpdateTripTest extends BaseTest
 
     public function testUpdateTripNonAlphaNumSpaceOrigin()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
-
-        $user  = User::where('email', 'Nico@example.com')->first();
-        $trip = $user->trips()->first();
+        $trip = Trip::factory()->state([
+            'user_id' => $user->id
+        ])->create();
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -94,7 +97,7 @@ class UpdateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -111,12 +114,12 @@ class UpdateTripTest extends BaseTest
 
     public function testUpdateTripNonAlphaNumSpaceDestination()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
-
-        $user  = User::where('email', 'Nico@example.com')->first();
-        $trip = $user->trips()->first();
+        $trip = Trip::factory()->state([
+            'user_id' => $user->id
+        ])->create();
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -127,7 +130,7 @@ class UpdateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -144,12 +147,12 @@ class UpdateTripTest extends BaseTest
 
     public function testUpdateTripDateFromInThePast()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
-
-        $user  = User::where('email', 'Nico@example.com')->first();
-        $trip = $user->trips()->first();
+        $trip = Trip::factory()->state([
+            'user_id' => $user->id
+        ])->create();
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -160,7 +163,7 @@ class UpdateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -177,12 +180,12 @@ class UpdateTripTest extends BaseTest
 
     public function testUpdateTripDateToBeforeDateFrom()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
-
-        $user  = User::where('email', 'Nico@example.com')->first();
-        $trip = $user->trips()->first();
+        $trip = Trip::factory()->state([
+            'user_id' => $user->id
+        ])->create();
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -193,7 +196,7 @@ class UpdateTripTest extends BaseTest
             'date_to' => '2022-05-07 23:59:59'
         ];
 
-        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json'])
             ->assertStatus(400)
             ->assertJson([
                 'error_code' => 400,
@@ -210,12 +213,12 @@ class UpdateTripTest extends BaseTest
 
     public function testUpdateTripSuccess()
     {
-        $this->seed();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'web');
 
-        $token = $this->getLoginToken();
-
-        $user  = User::where('email', 'Nico@example.com')->first();
-        $trip = $user->trips()->first();
+        $trip = Trip::factory()->state([
+            'user_id' => $user->id
+        ])->create();
 
         $tripData = [
             'title' => 'Trip To Singapore',
@@ -226,7 +229,7 @@ class UpdateTripTest extends BaseTest
             'date_to' => '2022-06-07 23:59:59'
         ];
 
-        $updateTripResponse = $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $updateTripResponse = $this->json('POST', "api/trips/{$trip->id}", $tripData, ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->decodeResponseJson();
 
@@ -250,7 +253,7 @@ class UpdateTripTest extends BaseTest
 
         $trip = $updateTripResponse['data']['trip'];
 
-        $this->json('GET', 'api/trips', [], ['Accept' => 'application/json', 'Authorization' => "Bearer $token"])
+        $this->json('GET', 'api/trips', [], ['Accept' => 'application/json'])
             ->assertStatus(200)
             ->assertJsonFragment([
                 'id' => $trip['id'],
