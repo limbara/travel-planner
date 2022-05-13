@@ -1,5 +1,8 @@
 # travel-planner
-simple travel planner api. built with Laravel 9.X
+simple travel planner api. built with Laravel 9.X. 
+
+# missing :
+* **Type‌ ‌of‌ ‌the‌ ‌trip** can't really think what this values should be
 
 ## Instalation Requirement
 * [Docker](https://docs.docker.com/get-docker) 
