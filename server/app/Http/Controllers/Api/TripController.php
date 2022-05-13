@@ -185,10 +185,6 @@ class TripController extends Controller
         })
             ->groupBy('start_date')
             ->all();
-        // ->mapToGroups(function ($savedPlan) {
-        //     return [$savedPlan->start_date => $savedPlan];
-        // })
-        // ->all();
 
         return $this->responseSuccess('Success', [
             'trip' => $savedTrip,
@@ -342,7 +338,7 @@ class TripController extends Controller
             'id' => Str::uuid(),
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'plannable_type' => FlightPlan::class,
+            'plannable_type' => LodgingPlan::class,
             'plannable_id' => $lodgingPlan->id,
             'start_date' => $checkInDate->format('Y-m-d'),
             'end_date' => $checkOutDate->format('Y-m-d'),
@@ -392,7 +388,7 @@ class TripController extends Controller
             'id' => Str::uuid(),
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'plannable_type' => FlightPlan::class,
+            'plannable_type' => TransportPlan::class,
             'plannable_id' => $transportPlan->id,
             'start_date' => $transportDate->format('Y-m-d'),
             'end_date' => $transportDateEnd->format('Y-m-d'),
