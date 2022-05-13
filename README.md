@@ -20,3 +20,5 @@ if you want to stop:
 
 ## To Run Laravel Commands
 * `docker-compose exec server sh` and then type your laravel commands
+* `php artisan migrate`
+* `php artisan db:seed`
