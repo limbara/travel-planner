@@ -429,7 +429,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Lodging Plan",
+					"name": "Create Activity Plan",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -473,7 +473,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Activity Plan",
+					"name": "Create Lodging Plan",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -511,6 +511,47 @@
 								"trips",
 								"{{trip_id_index_0}}",
 								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Trip Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/trips/{{trip_id_index_0}}/plans/c85997a7-52a5-4918-8937-06d10ab99177",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"trips",
+								"{{trip_id_index_0}}",
+								"plans",
+								"c85997a7-52a5-4918-8937-06d10ab99177"
 							]
 						}
 					},
