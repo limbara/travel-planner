@@ -18,6 +18,7 @@ use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TripController extends Controller
@@ -207,6 +208,49 @@ class TripController extends Controller
                 return $this->storeTripTransportPlan($request, $id);
             default:
                 throw new BadRequestException("Store plan {$planType} doesn't exists");
+        }
+    }
+
+    public function deletePlan(string $id, string $planId)
+    {
+        $savedTrip = Trip::where('id', $id)->first();
+
+        if (!$savedTrip) {
+            throw new NotFoundException("Trip Not Found");
+        }
+
+        DB::beginTransaction();
+        try {
+            $savedPlan = Plan::where('id', $planId)->first();
+
+            if (!$savedPlan) {
+                throw new NotFoundException("Plan Not Found");
+            }
+
+            $plannableObject = match ($savedPlan->plannable_type) {
+                FlightPlan::class => FlightPlan::where('id', $savedPlan->plannable_id)->first(),
+                ActivityPlan::class => ActivityPlan::where('id', $savedPlan->plannable_id)->first(),
+                LodgingPlan::class => LodgingPlan::where('id', $savedPlan->plannable_id)->first(),
+                TransportPlan::class => TransportPlan::where('id', $savedPlan->plannable_id)->first(),
+                default => null
+            };
+
+            if ($plannableObject) {
+                $plannableObject->delete();
+            }
+
+            $savedPlan->delete();
+            DB::commit();
+
+            return $this->responseSuccess("Success", [
+                'plan' => array_merge($savedPlan->toArray(), [
+                    'plannable_object' => $plannableObject
+                ])
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            throw $e;
         }
     }
 
